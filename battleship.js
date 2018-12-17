@@ -25,10 +25,10 @@ var model = {
 	],
 
 	fire: function(guess) {
-		for (var i = 0; i < this.numShips; i++) {
-			var ship = this.ships[i];
-			var index = ship.locations.indexOf(guess);
-			if (index >= 0) {
+        for (var i = 0; i < this.numShips; i++) {
+            var ship = this.ships[i];
+            var index = ship.locations.indexOf(guess);
+			 if (index >= 0) {
 				ship.hits[index] = "hit";
 				view.displayHit(guess);
 				view.displayMessage("HIT!");
@@ -38,7 +38,7 @@ var model = {
 				}
 				return true;
 			}
-		}
+		}  
 		view.displayMiss(guess);
 		view.displayMessage("You missed.");
 		return false;
@@ -100,11 +100,22 @@ var model = {
 
 };
 
+
 var controller = {
 	guesses: 0,
 	processGuess: function(guess) {
-		var location = parseGuess(guess);
-		if (location) {
+        var location = parseGuess(guess);
+        
+         // check if user already tried the field
+        var cell = document.getElementById(location);
+        if (cell.hasAttribute("class", "miss") || cell.hasAttribute("class", "hit")) {
+        // if yes
+            alert("You've already tried it! Try another guess.");
+        return true;
+        // if no
+        } else {
+        
+            if (location) {
 			this.guesses++
 			var hit = model.fire(location);
 			if (hit && model.shipsSunk === model.numShips) {
@@ -112,6 +123,7 @@ var controller = {
 			}
 		}
 	}
+    }
 };
 
 function parseGuess(guess) {
